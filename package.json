@@ -1,6 +1,6 @@
 {
   "name": "hobknob-toggle-logger-influx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "log toggle events to influxdb",
   "main": "index.js",
   "scripts": {
