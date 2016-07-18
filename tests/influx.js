@@ -80,4 +80,20 @@ describe('write', () => {
       done();
     });
   });
+
+  it('should set handle two-part names', (done) => {
+    client.write({
+        user: { name: { givenName: 'anony', familyName: 'mous' } },
+        applicationName: 'my-app',
+        featureName: 'my-feature',
+        value: false
+    }, (err) => {
+      if(err){
+        return done(err);
+      }
+
+      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anony\\ mous');
+      done();
+    });
+  });
 });
