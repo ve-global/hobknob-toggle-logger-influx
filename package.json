@@ -1,0 +1,31 @@
+{
+  "name": "hobknob-toggle-logger-influx",
+  "version": "1.0.0",
+  "description": "log toggle events to influxdb",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ve-interactive/hobknob-toggle-logger-influx.git"
+  },
+  "author": "Andy Royle <ajroyle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ve-interactive/hobknob-toggle-logger-influx/issues"
+  },
+  "homepage": "https://github.com/ve-interactive/hobknob-toggle-logger-influx#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.5.3",
+    "proxyquire": "^1.7.10",
+    "should": "^9.0.2"
+  },
+  "dependencies": {
+    "request": "^2.73.0"
+  }
+}

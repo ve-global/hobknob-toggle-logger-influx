@@ -1,0 +1,10 @@
+{
+  "host": "127.0.0.1",
+  "port": 8086,
+  "database": "my_database",
+  "username": "user",
+  "password": "password",
+  "tags": {
+    "env": "test"
+  }
+}
