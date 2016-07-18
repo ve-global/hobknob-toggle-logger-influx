@@ -16,7 +16,8 @@ __Configuration__
   "username": "user",
   "password": "password",
   "tags": {
-    "env": "test"
-  }
+    "env": "test"            // optional tags for the measurement
+  },
+  "prefix": "foo.bar"        // optional prefix for measurement names
 }
 ```

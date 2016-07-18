@@ -21,6 +21,7 @@
     "grunt-cli": "^1.2.0",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-test": "^0.12.7",
+    "lodash.clone": "^4.3.2",
     "mocha": "^2.5.3",
     "proxyquire": "^1.7.10",
     "should": "^9.0.2"

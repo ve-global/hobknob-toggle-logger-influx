@@ -1,6 +1,7 @@
 'use strict';
 var proxyquire = require('proxyquire').noCallThru();
 var should = require('should');
+var clone = require('lodash.clone');
 
 describe('write', () => {
   var calls = [];
@@ -14,9 +15,11 @@ describe('write', () => {
       env: 'test'
     }
   };
+  var config = clone(baseConfig);
 
   beforeEach(() => {
     calls = [];
+    config = clone(baseConfig);
   });
 
   var exec = (payload, done) => {
@@ -25,7 +28,7 @@ describe('write', () => {
         calls.push(options);
         cb(null, { statusCode: 204 });
       },
-      '../config.json': baseConfig
+      '../config.json': config
     });
 
     client.write(payload, (err) => {
@@ -99,7 +102,7 @@ describe('write', () => {
     });
   });
 
-  it('should set handle two-part names', (done) => {
+  it('should handle two-part names', (done) => {
     exec({
         user: { name: { givenName: 'anony', familyName: 'mous' } },
         applicationName: 'my-app',
@@ -115,8 +118,26 @@ describe('write', () => {
     });
   });
 
+  it('should apply any prefix set', (done) => {
+    config.prefix = 'foo.bar';
+
+    exec({
+        user: { name: { givenName: 'anony', familyName: 'mous' } },
+        applicationName: 'my-app',
+        featureName: 'my-feature',
+        value: false
+    }, (err) => {
+      if(err){
+        return done(err);
+      }
+
+      calls[0].body.should.startWith('foo.bar.hobknob.my-app.my-feature.toggle');
+      done();
+    });
+  });
+
   it('should handle empty tags', (done) => {
-    baseConfig.tags = {};
+    config.tags = {};
 
     exec({
         user: { name: { givenName: 'anony', familyName: 'mous' } },
@@ -134,7 +155,7 @@ describe('write', () => {
   });
 
   it('should handle multiple tags', (done) => {
-    baseConfig.tags = {
+    config.tags = {
       foo: 'foo',
       bar: 'bar'
     };
