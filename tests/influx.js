@@ -4,19 +4,37 @@ var should = require('should');
 
 describe('write', () => {
   var calls = [];
-  var client = proxyquire('../lib/influx', {
-    request: (options, cb) => {
-      calls.push(options);
-      cb(null, { statusCode: 204 });
+  var baseConfig = {
+    host: '127.0.0.1',
+    port: 8086,
+    database: 'my_database',
+    username: 'user',
+    password: 'password',
+    tags: {
+      env: 'test'
     }
-  });
+  };
 
   beforeEach(() => {
     calls = [];
   });
 
+  var exec = (payload, done) => {
+    var client = proxyquire('../lib/influx', {
+      request: (options, cb) => {
+        calls.push(options);
+        cb(null, { statusCode: 204 });
+      },
+      '../config.json': baseConfig
+    });
+
+    client.write(payload, (err) => {
+      done(err);
+    });
+  };
+
   it('should convert the payload to an influxdb line', (done) => {
-    client.write({
+    exec({
         user: { name: 'anonymous' },
         applicationName: 'my-app',
         featureName: 'my-feature',
@@ -33,7 +51,7 @@ describe('write', () => {
   });
 
   it('should set toggleName if undefined', (done) => {
-    client.write({
+    exec({
         user: { name: 'anonymous' },
         applicationName: 'my-app',
         featureName: 'my-feature',
@@ -49,7 +67,7 @@ describe('write', () => {
   });
 
   it('should replace the config vars in the url', (done) => {
-    client.write({
+    exec({
         user: { name: 'anonymous' },
         applicationName: 'my-app',
         featureName: 'my-feature',
@@ -65,7 +83,7 @@ describe('write', () => {
   });
 
   it('should set the auth credentials', (done) => {
-    client.write({
+    exec({
         user: { name: 'anonymous' },
         applicationName: 'my-app',
         featureName: 'my-feature',
@@ -82,7 +100,7 @@ describe('write', () => {
   });
 
   it('should set handle two-part names', (done) => {
-    client.write({
+    exec({
         user: { name: { givenName: 'anony', familyName: 'mous' } },
         applicationName: 'my-app',
         featureName: 'my-feature',
@@ -93,6 +111,45 @@ describe('write', () => {
       }
 
       calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anony\\ mous');
+      done();
+    });
+  });
+
+  it('should handle empty tags', (done) => {
+    baseConfig.tags = {};
+
+    exec({
+        user: { name: { givenName: 'anony', familyName: 'mous' } },
+        applicationName: 'my-app',
+        featureName: 'my-feature',
+        value: false
+    }, (err) => {
+      if(err){
+        return done(err);
+      }
+
+      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anony\\ mous ');
+      done();
+    });
+  });
+
+  it('should handle multiple tags', (done) => {
+    baseConfig.tags = {
+      foo: 'foo',
+      bar: 'bar'
+    };
+
+    exec({
+        user: { name: 'anonymous' },
+        applicationName: 'my-app',
+        featureName: 'my-feature',
+        value: false
+    }, (err) => {
+      if(err){
+        return done(err);
+      }
+
+      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anonymous,foo=foo,bar=bar');
       done();
     });
   });
