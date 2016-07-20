@@ -48,7 +48,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature/my-toggle,user=anonymous,env=test value=false');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature/my-toggle,user=anonymous,env=test value="false"');
       done();
     });
   });
@@ -64,7 +64,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anonymous,env=test value=false');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anonymous,env=test value="false"');
       done();
     });
   });
