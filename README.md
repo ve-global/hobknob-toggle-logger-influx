@@ -21,3 +21,12 @@ __Configuration__
   "prefix": "foo.bar"        // optional prefix for measurement names
 }
 ```
+
+__Hobknob Configuration__
+
+```
+  "hooks": [
+    "foo/some/other/hook.js",
+    "node_modules/hobknob-toggle-logger-influx/index.js"
+  ]
+```
