@@ -48,7 +48,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app.my-feature.my-toggle,user=anonymous,env=test value=false');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature/my-toggle,user=anonymous,env=test value=false');
       done();
     });
   });
@@ -64,7 +64,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anonymous,env=test value=false');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anonymous,env=test value=false');
       done();
     });
   });
@@ -113,7 +113,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anony\\ mous');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anony\\ mous');
       done();
     });
   });
@@ -131,7 +131,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('foo.bar.hobknob.my-app.my-feature.toggle');
+      calls[0].body.should.startWith('foo.bar.hobknob.my-app');
       done();
     });
   });
@@ -149,7 +149,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anony\\ mous ');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anony\\ mous ');
       done();
     });
   });
@@ -170,7 +170,7 @@ describe('write', () => {
         return done(err);
       }
 
-      calls[0].body.should.startWith('hobknob.my-app.my-feature.toggle,user=anonymous,foo=foo,bar=bar');
+      calls[0].body.should.startWith('hobknob.my-app,toggle=my-feature,user=anonymous,foo=foo,bar=bar');
       done();
     });
   });
