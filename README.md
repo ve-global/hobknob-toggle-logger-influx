@@ -30,3 +30,28 @@ __Hobknob Configuration__
     "node_modules/hobknob-toggle-logger-influx/index.js"
   ]
 ```
+
+__Measurements__
+
+Writes measurements to influxdb in the following format:
+
+`hobknob.<app-name>,toggle=<featurename>/<togglename>,user=<user> value="<value>" <timestamp>`
+
+So if you have an app called: 'my-cool-app', and a (simple) toggle called 'my-cool-toggle' you'll get something like this:
+
+`hobknob.my-cool-app,toggle=my-cool-toggle,user=me value="false" 1469028556621874800`
+
+A category feature would look like this:
+
+`hobknob.my-cool-app,toggle=my-category/my-cool-toggle,user=me value="false" 1469028556621874800`
+
+Note the value is wrapped in quotes to force influxdb to treat it as a string (instead of a bool). This makes things simpler if you're using these measurements as annotations in grafana.
+
+__Hooking to grafana__
+
+Once you've got your measurements, you can add an annotation in grafana, with the following query:
+
+`select toggle,"user",value from "hobknob.my-app" where $timefilter`
+(note `user` is a reserved keyword in influx, so we have to wrap it in quotes)
+
+Set the column mappings and you're done! I prefer to set `title = toggle`, `tags = value` and `text = user`.
